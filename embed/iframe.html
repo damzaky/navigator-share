@@ -1,0 +1,47 @@
+<html>
+  <head></head>
+  <body>
+    <button id="button1">Share text</button>
+    <div id="output1"></div>
+    <button id="button2">Share image</button>
+    <div id="output2"></div>
+    <script>
+      document.getElementById('button1').addEventListener('click', async () => {
+        try {
+          await navigator.share({
+            title: 'Title text',
+            text: 'Body text',
+            url: location.href,
+          });
+        } catch (err) {
+          document.getElementById('output1').textContent += `${err.name}: ${err.message}\n`;
+        }
+      });
+
+      const share = async () => {
+        const blob = await fetch('https://www.w3schools.com/w3css/img_workshop.jpg').then(r=>r.blob());
+        
+        const data = {
+          files: [
+            new File([blob], 'file.png', {
+              type: blob.type,
+            }),
+          ],
+          title: 'Title text',
+          text: 'Body text',
+        };
+        
+        try {
+          if (!(navigator.canShare(data))) {
+            throw new Error("Can't share data.", data);
+          }
+          await navigator.share(data);
+        } catch (err) {
+          document.getElementById('output2').textContent += `${err.name}: ${err.message}\n`;
+        }
+      };
+
+      document.getElementById('button2').addEventListener('click', share);
+    </script>
+  </body>
+</html>
