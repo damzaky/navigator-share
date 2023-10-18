@@ -5,6 +5,8 @@
     <div id="output1"></div>
     <button id="button2">Share image</button>
     <div id="output2"></div>
+    <button id="button3">Share image gradient</button>
+    <div id="output3"></div>
     <script>
       document.getElementById('button1').addEventListener('click', async () => {
         try {
@@ -39,7 +41,29 @@
         }
       };
 
+      const share3 = async () => {
+        const blob = await fetch('https://damzaky.github.io/navigator-share/gradient.png').then(r=>r.blob());
+        
+        const data = {
+          files: [
+            new File([blob], 'file.png', {
+              type: blob.type,
+            }),
+          ],
+        };
+        
+        try {
+          if (!(navigator.canShare(data))) {
+            throw new Error("Can't share data.", data);
+          }
+          await navigator.share(data);
+        } catch (err) {
+          document.getElementById('output3').textContent += `${err.name}: ${err.message}\n`;
+        }
+      };
+
       document.getElementById('button2').addEventListener('click', share);
+      document.getElementById('button3').addEventListener('click', share3);
     </script>
   </body>
 </html>
