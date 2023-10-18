@@ -1,12 +1,22 @@
 <html>
   <head></head>
   <body>
+    <h1>Working snippet</h1>
     <button id="button1">Share text</button>
     <div id="output1"></div>
-    <button id="button2">Share image</button>
-    <div id="output2"></div>
+    
     <button id="button3">Share image gradient</button>
     <div id="output3"></div>
+    <br/>
+    <br/>
+    <br/>
+    <h1>Untested snippet</h1>
+    <button id="button2">Share image</button>
+    <div id="output2"></div>
+    <button id="button4">Share image gradient with text</button>
+    <div id="output4"></div>
+    <button id="button5">Share image jpg</button>
+    <div id="output5"></div>
     <script>
       document.getElementById('button1').addEventListener('click', async () => {
         try {
@@ -25,7 +35,7 @@
         
         const data = {
           files: [
-            new File([blob], 'file.png', {
+            new File([blob], 'file.jpg', {
               type: blob.type,
             }),
           ],
@@ -62,8 +72,56 @@
         }
       };
 
+      const share4 = async () => {
+        const blob = await fetch('https://damzaky.github.io/navigator-share/gradient.png').then(r=>r.blob());
+        
+        const data = {
+          files: [
+            new File([blob], 'file.png', {
+              type: blob.type,
+            }),
+          ],
+          title: 'Title text',
+          text: 'Body text',
+        };
+        
+        try {
+          if (!(navigator.canShare(data))) {
+            throw new Error("Can't share data.", data);
+          }
+          await navigator.share(data);
+        } catch (err) {
+          document.getElementById('output4').textContent += `${err.name}: ${err.message}\n`;
+        }
+      };
+
+      const share5 = async () => {
+        const blob = await fetch('https://damzaky.github.io/navigator-share/windowsxp.jpg').then(r=>r.blob());
+        
+        const data = {
+          files: [
+            new File([blob], 'file.jpg', {
+              type: blob.type,
+            }),
+          ],
+          title: 'Title text',
+          text: 'Body text',
+        };
+        
+        try {
+          if (!(navigator.canShare(data))) {
+            throw new Error("Can't share data.", data);
+          }
+          await navigator.share(data);
+        } catch (err) {
+          document.getElementById('output5').textContent += `${err.name}: ${err.message}\n`;
+        }
+      };
+
       document.getElementById('button2').addEventListener('click', share);
       document.getElementById('button3').addEventListener('click', share3);
+      document.getElementById('button4').addEventListener('click', share4);
+      document.getElementById('button5').addEventListener('click', share5);
     </script>
   </body>
 </html>
