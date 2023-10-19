@@ -66,7 +66,8 @@
           if (!(navigator.canShare(data))) {
             throw new Error("Can't share data.", data);
           }
-          await navigator.share(data);
+          const shareres = await navigator.share(data);
+          document.getElementById('output3').textContent += `success share ${shareres}\n`;
         } catch (err) {
           document.getElementById('output3').textContent += `${err.name}: ${err.message}\n`;
         }
